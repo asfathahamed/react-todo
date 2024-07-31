@@ -1,8 +1,19 @@
+import {
+  TextField,
+  Box,
+  Grid,
+  Button,
+  Container,
+  CssBaseline,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+} from "@mui/material";
 import React, { useEffect, useReducer, useState } from "react";
-
-const tableStyle = {
-  width: "500px",
-};
 
 export default function TodoApp() {
   const todoListReducer = (state, { type, data }) => {
@@ -11,7 +22,8 @@ export default function TodoApp() {
         return [...state, data];
       }
       case "remove": {
-        return state.splice(data, 1);
+        state.splice(data, 1);
+        return [...state];
       }
       default:
         return state;
@@ -48,50 +60,86 @@ export default function TodoApp() {
 
   return (
     <>
-      <div>TodoApp</div>
-      {/* Form */}
-      <form action="" onSubmit={createTodoItem}>
-        <div>
-          <label>Description</label>
-          <input type="text" name="description" required />
-        </div>
-        <div>
-          <label>Due Date</label>
-          <input type="date" name="due" required min={todayDate} />
-        </div>
-        <div>
-          <button>Submit</button>
-        </div>
-      </form>
-      {/* Table */}
-      <table style={tableStyle}>
-        <thead style={{ textAlign: "left" }}>
-          <tr>
-            <th>Description</th>
-            <th>Due Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {todoList.map((todo, ind) => {
-            return (
-              <tr key={`todo-list-item-${ind}`}>
-                <td>{todo.description}</td>
-                <td>{todo.due}</td>
-                <td>
-                  <button
-                    onClick={() =>
-                      dispatchTodoList({ type: "remove", data: ind })
-                    }
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <Container component="main" maxWidth="md">
+        <CssBaseline />
+        <div>TodoApp</div>
+        {/* Form */}
+        <Box
+          component="form"
+          noValidate
+          onSubmit={createTodoItem}
+          sx={{ mt: 3 }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                type="text"
+                id="todo-description"
+                label="Description"
+                variant="standard"
+                name="description"
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                type="date"
+                id="todo-due"
+                label="Due Date"
+                variant="standard"
+                name="due"
+                required
+                min={todayDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Button variant="contained" size="small" type="submit" fullWidth>
+                Add Item
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        {/* Table */}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Description</TableCell>
+                <TableCell>Due Date</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {todoList.map((todo, ind) => (
+                <TableRow key={`todo-list-item-${ind}`}>
+                  <TableCell scope="row">{todo.description}</TableCell>
+                  <TableCell>{todo.due}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      type="submit"
+                      fullWidth
+                      color="error"
+                      onClick={() =>
+                        dispatchTodoList({ type: "remove", data: ind })
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
     </>
   );
 }
