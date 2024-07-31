@@ -12,6 +12,7 @@ import {
   TableRow,
   TableCell,
   Paper,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useReducer, useState } from "react";
 
@@ -62,7 +63,9 @@ export default function TodoApp() {
     <>
       <Container component="main" maxWidth="md">
         <CssBaseline />
-        <div>TodoApp</div>
+        <Typography variant="h4" component="h4">
+          TodoApp
+        </Typography>
         {/* Form */}
         <Box
           component="form"
